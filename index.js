@@ -82,7 +82,7 @@ const init = () => {
                 package.author = authorName
                 fs.writeFileSync(path.join(outputPath, 'package.json'), JSON.stringify(package, null, 2))
                 console.log(chalk.green('\nThe project has been generated successfully!'))
-                console.log(chalk.cyan('and the next installation is to run "npm install" or "yarn install" in the new directory.\n'))
+                console.log(chalk.cyan('The next installation is to run "npm install" or "yarn install" in the new directory.\n'))
               }
             })
             .catch(err => console.log(chalk.red(err)))
