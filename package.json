@@ -1,0 +1,31 @@
+{
+  "name": "nail-cli-init",
+  "version": "0.1.0",
+  "description": "Front-end Development Tool",
+  "homepage": "https://github.com/OwlAford/nail-cli-init",
+  "bin": {
+    "nail-init": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://@github.com/OwlAford/nail-cli-init.git"
+  },
+  "scripts": {
+    "start": "node ./index"
+  },
+  "author": "OwlAford",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OwlAford/nail-cli-init/issues"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "dependencies": {
+    "chalk": "^2.4.0",
+    "download-git-repo": "^1.0.2",
+    "fs-extra": "^5.0.0",
+    "inquirer": "^5.2.0",
+    "ora": "^2.0.0"
+  }
+}
