@@ -4,9 +4,12 @@ const ora = require('ora')
 const path = require('path')
 const chalk = require('chalk')
 const fs = require('fs-extra')
+const program = require('commander')
 const inquirer = require('inquirer')
+const spawn = require('cross-spawn')
 const packageJson = require('./package.json')
 const download = require('download-git-repo')
+const execSync = require("child_process").execSync
 
 const spinner = ora('The project template downloading...')
 const cmdDir = process.cwd()
@@ -19,11 +22,25 @@ const userReg = /^[a-zA-Z0-9_-]{4,16}$/
 let projectName = 'nail-app'
 let authorName = 'OwlAford'
 let outputPath = ''
+let installTypeList = ['npm']
 
-spinner.start()
+const isAvailable = cmd => {
+  try {
+    execSync(`${cmd} --version`, { stdio: 'ignore' })
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+isAvailable('yarnpkg') && installTypeList.push('yarn')
+isAvailable('cnpm') && installTypeList.push('cnpm')
+isAvailable('snpm') && installTypeList.push('snpm')
+installTypeList.push('not to install')
 
 const downloader = () =>
   new Promise((resolve, reject) => {
+    spinner.start()
     download('halo-design/nail-cli-template', tmpDir, err => {
       spinner.stop()
       if (err) {
@@ -32,7 +49,7 @@ const downloader = () =>
         console.log(chalk.yellow(`Please check the network and try to download again.\n`))
         reject(err)
       } else {
-        console.log(chalk.green('The project template was downloaded successfully.\n'))
+        console.log(chalk.green('\nThe project template was downloaded successfully.\n'))
         resolve()
       }
     })
@@ -44,6 +61,15 @@ const copyer = (from, to, exclude) => {
     dereference: true,
     filter: file => exclude.every(item => path.join(tmpDir, item) !== file)
   })
+}
+
+const install = type => {
+  try {
+    process.chdir(outputPath)
+    const result = spawn.sync(type, ['install'], { stdio: 'inherit' })
+  } catch (err) {
+    console.log(chalk.red(`Installation failed: ${err}`))
+  }
 }
 
 const init = () => {
@@ -81,12 +107,36 @@ const init = () => {
                 package.name = projectName
                 package.author = authorName
                 fs.writeFileSync(path.join(outputPath, 'package.json'), JSON.stringify(package, null, 2))
-                console.log(chalk.green('\nThe project has been generated successfully!'))
-                console.log(chalk.cyan('The next installation is to run "npm install" or "yarn install" in the new directory.\n'))
+                console.log(chalk.green('\nThe project has been generated successfully!\n'))
+
+                inquirer
+                  .prompt([{
+                    type: 'list',
+                    message: 'Please select the NPM package installation tool:',
+                    name: 'installType',
+                    choices: installTypeList
+                  }]).then(ans => {
+                    const type = ans.installType
+                    if (type === 'not to install') {
+                      console.log(chalk.cyan('\nThe next installation is to run "npm install" or "yarn install" in the new directory.\n'))
+                    } else {
+                      install(type)
+                    }
+                  })
+
+              } else {
+                console.log(chalk.yellow('\nYou have dropped out of the installation.\n'))
               }
             })
             .catch(err => console.log(chalk.red(err)))
       })
 }
 
-downloader().then(init)
+program
+  .version('0.1.3', '-v, --version')
+  .command('init')
+  .action(() => {
+    downloader().then(init)
+  })
+  
+program.parse(process.argv)
