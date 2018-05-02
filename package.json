@@ -1,7 +1,7 @@
 {
   "name": "nail-cli-init",
-  "version": "0.1.4",
-  "description": "Front-end Development Tool",
+  "version": "0.1.5",
+  "description": "Project Template Generation Tool",
   "homepage": "https://github.com/OwlAford/nail-cli-init",
   "bin": {
     "nail": "./index.js"
