@@ -63,6 +63,17 @@ const copyer = (from, to, exclude) => {
   })
 }
 
+const excluder = (jsonData, type, exclude) => {
+  const group = jsonData[type]
+  let newGroup = {}
+  for (let key in group) {
+    if (exclude.every(item => item !== key)) {
+      newGroup[key] = group[key]
+    }
+  }
+  return newGroup
+}
+
 const install = type => {
   try {
     process.chdir(outputPath)
@@ -84,6 +95,10 @@ const init = () => {
       message: 'Please enter the author name:',
       validate: input => userReg.test(input),
       name: 'author'
+    }, {
+      type: 'confirm',
+      message: 'Do you need to install an e2e test tool:',
+      name: 'e2e'
     }])
       .then(answers => {
         projectName = answers.projectName.replace(/ /g, '-')
@@ -100,12 +115,24 @@ const init = () => {
             : 'Target directory exists. Continue?',
             name: 'ok'
           }])
-            .then(answers => {
-              if (answers.ok) {
-                copyer(tmpDir, outputPath, ['package.json'])
+            .then(result => {
+              if (result.ok) {
+                let excludeList = ['package.json']
+
+                if (!answers.e2e) {
+                  excludeList.push('cypress.json', 'tests/e2e')
+                }
+                copyer(tmpDir, outputPath, excludeList)
+
                 let package = JSON.parse(fs.readFileSync(path.join(tmpDir, 'package.json')))
                 package.name = projectName
                 package.author = authorName
+
+                if (!answers.e2e) {
+                  package.devDependencies = excluder(package, 'devDependencies', ['cypress'])
+                  package.scripts = excluder(package, 'scripts', ['e2e', 'e2e:o'])
+                }
+
                 fs.writeFileSync(path.join(outputPath, 'package.json'), JSON.stringify(package, null, 2))
                 console.log(chalk.green('\nThe project has been generated successfully!\n'))
 
@@ -133,7 +160,7 @@ const init = () => {
 }
 
 program
-  .version('0.1.3', '-v, --version')
+  .version('0.1.4', '-v, --version')
   .command('init')
   .action(() => {
     downloader().then(init)

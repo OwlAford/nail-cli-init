@@ -1,6 +1,6 @@
 {
   "name": "nail-cli-init",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Front-end Development Tool",
   "homepage": "https://github.com/OwlAford/nail-cli-init",
   "bin": {
@@ -11,7 +11,7 @@
     "url": "git+https://@github.com/OwlAford/nail-cli-init.git"
   },
   "scripts": {
-    "start": "node ./index"
+    "start": "node ./index init"
   },
   "author": "OwlAford",
   "license": "MIT",
