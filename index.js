@@ -150,7 +150,6 @@ const init = () => {
                       install(type)
                     }
                   })
-
               } else {
                 console.log(chalk.yellow('\nYou have dropped out of the installation.\n'))
               }
