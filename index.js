@@ -41,6 +41,7 @@ installTypeList.push('not to install')
 const downloader = () =>
   new Promise((resolve, reject) => {
     spinner.start()
+    fs.emptyDirSync(tmpDir)
     download('halo-design/nail-cli-template', tmpDir, err => {
       spinner.stop()
       if (err) {
