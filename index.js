@@ -118,7 +118,7 @@ const init = () => {
           }])
             .then(result => {
               if (result.ok) {
-                let excludeList = ['package.json']
+                let excludeList = ['package.json', 'LICENSE', '.travis.yml']
 
                 if (!answers.e2e) {
                   excludeList.push('cypress.json', 'tests/e2e')
