@@ -9,7 +9,7 @@ const inquirer = require('inquirer')
 const spawn = require('cross-spawn')
 const packageJson = require('./package.json')
 const download = require('download-git-repo')
-const execSync = require("child_process").execSync
+const execSync = require('child_process').execSync
 
 const spinner = ora('The project template downloading...')
 const cmdDir = process.cwd()
@@ -160,8 +160,8 @@ const init = () => {
 }
 
 program
-  .version(packageJson.version, "-v, --version")
-  .command("init")
+  .version(packageJson.version, '-v, --version')
+  .command('init')
   .action(() => {
     downloader().then(init);
   });
