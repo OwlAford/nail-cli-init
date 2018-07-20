@@ -160,10 +160,10 @@ const init = () => {
 }
 
 program
-  .version('0.1.4', '-v, --version')
-  .command('init')
+  .version(packageJson.version, "-v, --version")
+  .command("init")
   .action(() => {
-    downloader().then(init)
-  })
+    downloader().then(init);
+  });
   
 program.parse(process.argv)
