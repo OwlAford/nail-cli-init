@@ -1,6 +1,6 @@
 {
   "name": "@nail-cli/init",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Project Template Generation Tool",
   "homepage": "https://github.com/OwlAford/nail-cli-init",
   "bin": {
@@ -22,12 +22,12 @@
     "node": ">=6"
   },
   "dependencies": {
-    "chalk": "^2.4.0",
-    "commander": "^2.15.1",
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
     "cross-spawn": "^6.0.5",
-    "download-git-repo": "^1.0.2",
-    "fs-extra": "^5.0.0",
-    "inquirer": "^5.2.0",
-    "ora": "^2.0.0"
+    "download-git-repo": "^1.1.0",
+    "fs-extra": "^8.0.1",
+    "inquirer": "^6.3.1",
+    "ora": "^3.4.0"
   }
 }
